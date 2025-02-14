@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import QUESTIONS from "../utils/questions.js";
-import quizCompletedImg from "../assets/quiz-complete.png";
 import Question from "./Question.jsx";
+import Summary from "./Summary.jsx";
 const QUESTION_TIME_LIMIT = 10000;
 
 export default function Quiz() {
@@ -21,12 +21,7 @@ export default function Quiz() {
   }, [handleSelectAnswer]);
 
   if (isQuizCompleted) {
-    return (
-      <div id="summary">
-        <img src={quizCompletedImg} alt="Quiz Completed" />
-        <h2>Quiz completed</h2>
-      </div>
-    );
+    return <Summary userAnswers={userAnswers} />;
   }
 
   return (

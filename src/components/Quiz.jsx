@@ -1,8 +1,7 @@
 import { useState, useCallback } from "react";
 import QUESTIONS from "../utils/questions.js";
 import quizCompletedImg from "../assets/quiz-complete.png";
-import QuestionTimer from "./QuestionTimer.jsx";
-import { use } from "react";
+import Question from "./Question.jsx";
 const QUESTION_TIME_LIMIT = 10000;
 
 export default function Quiz() {
@@ -43,43 +42,18 @@ export default function Quiz() {
     );
   }
 
-  const shuffledQuestions = [...QUESTIONS[currentQuestion].answers];
-  shuffledQuestions.sort(() => Math.random() - 0.5);
-
   return (
     <div id="quiz">
-      <div id="question">
-        <QuestionTimer
-          key={currentQuestion} // Add key prop to QuestionTimer to recreate it every time the currentQuestion changes
-          timeOut={QUESTION_TIME_LIMIT}
-          onTimeOut={handleSkipAnswer}
-        />
-        <h2>{QUESTIONS[currentQuestion].text}</h2>
-        <ul id="answers">
-          {shuffledQuestions.map((answer) => {
-            const isSelected = userAnswers[userAnswers.length - 1] === answer;
-            let answerClass = "";
-            if (answerState === "answered" && isSelected) {
-              answerClass = "selected";
-            }
-
-            if (answerState === ("correct" || "wrong") && isSelected) {
-              answerClass = answerState;
-            }
-
-            return (
-              <li key={answer} className="answer">
-                <button
-                  onClick={() => handleSelectAnswer(answer)}
-                  className={answerClass}
-                >
-                  {answer}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <Question
+        key={currentQuestion}
+        question={QUESTIONS[currentQuestion].text}
+        answers={QUESTIONS[currentQuestion].answers}
+        onSelectAnswer={handleSelectAnswer}
+        selectedAnswer={userAnswers[userAnswers.length - 1]}
+        answerState={answerState}
+        onSkipAnswer={handleSkipAnswer}
+        timeOut={QUESTION_TIME_LIMIT}
+      />
     </div>
   );
 }

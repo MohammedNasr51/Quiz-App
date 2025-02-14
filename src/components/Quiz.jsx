@@ -6,28 +6,15 @@ const QUESTION_TIME_LIMIT = 10000;
 
 export default function Quiz() {
   const [userAnswers, setUserAnswers] = useState([]);
-  const [answerState, setAnswerState] = useState("");
-  const currentQuestion =
-    answerState === "" ? userAnswers.length : userAnswers.length - 1;
+  const currentQuestion = userAnswers.length;
   const isQuizCompleted = currentQuestion === QUESTIONS.length;
 
-  const handleSelectAnswer = useCallback(
-    function handleSelectAnswer(newAnswer) {
-      setAnswerState("answered");
-      setUserAnswers((prevAnswers) => [...prevAnswers, newAnswer]);
-      setTimeout(() => {
-        if (newAnswer === QUESTIONS[currentQuestion].answers[0]) {
-          setAnswerState("correct");
-        } else {
-          setAnswerState("wrong");
-        }
-        setTimeout(() => {
-          setAnswerState("");
-        }, 2000);
-      }, 1000);
-    },
-    [currentQuestion]
-  );
+  const handleSelectAnswer = useCallback(function handleSelectAnswer(
+    newAnswer
+  ) {
+    setUserAnswers((prevAnswers) => [...prevAnswers, newAnswer]);
+  },
+  []);
 
   const handleSkipAnswer = useCallback(() => {
     handleSelectAnswer(null);
@@ -46,11 +33,8 @@ export default function Quiz() {
     <div id="quiz">
       <Question
         key={currentQuestion}
-        question={QUESTIONS[currentQuestion].text}
-        answers={QUESTIONS[currentQuestion].answers}
+        index={currentQuestion}
         onSelectAnswer={handleSelectAnswer}
-        selectedAnswer={userAnswers[userAnswers.length - 1]}
-        answerState={answerState}
         onSkipAnswer={handleSkipAnswer}
         timeOut={QUESTION_TIME_LIMIT}
       />
